@@ -51,12 +51,13 @@ func (l *List[T]) Remove(obj *Node[T]) {
 
 	if obj.prev != nil {
 		obj.prev.next = obj.next
-		obj.prev = nil
 	}
 	if obj.next != nil {
 		obj.next.prev = obj.prev
-		obj.next = nil
 	}
+
+	obj.prev = nil
+	obj.next = nil
 }
 
 // gross
