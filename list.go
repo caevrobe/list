@@ -2,68 +2,68 @@ package list
 
 import "fmt"
 
-type list[T any] struct {
-	head *node[T]
-	tail *node[T]
+type List[T any] struct {
+	Head *Node[T]
+	Tail *Node[T]
 }
 
-type node[T any] struct {
-	value T
-	prev  *node[T]
-	next  *node[T]
+type Node[T any] struct {
+	Value T
+	Prev  *Node[T]
+	Next  *Node[T]
 }
 
-func New[T any]() *list[T] {
-	return &list[T]{}
+func New[T any]() *List[T] {
+	return &List[T]{}
 }
 
-func (l *list[T]) Insert(value T) *node[T] {
-	obj := &node[T]{value, nil, nil}
+func (l *List[T]) Insert(Value T) *Node[T] {
+	obj := &Node[T]{Value, nil, nil}
 
-	if l.head == nil {
-		l.head = obj
+	if l.Head == nil {
+		l.Head = obj
 	} else {
-		l.tail.next = obj
+		l.Tail.Next = obj
 	}
 
-	obj.prev = l.tail
-	l.tail = obj
+	obj.Prev = l.Tail
+	l.Tail = obj
 	return obj
 }
 
-func (l *list[T]) Remove(obj *node[T]) {
-	if obj == l.head {
-		l.head = obj.next
+func (l *List[T]) Remove(obj *Node[T]) {
+	if obj == l.Head {
+		l.Head = obj.Next
 	}
-	if obj == l.tail {
-		l.tail = obj.prev
+	if obj == l.Tail {
+		l.Tail = obj.Prev
 	}
 
-	if obj.prev != nil {
-		obj.prev.next = obj.next
+	if obj.Prev != nil {
+		obj.Prev.Next = obj.Next
 	}
-	if obj.next != nil {
-		obj.next.prev = obj.prev
+	if obj.Next != nil {
+		obj.Next.Prev = obj.Prev
 	}
 }
 
 // gross
-func (l *list[T]) String() string {
+func (l *List[T]) String() string {
 	contents := "["
-	for item := l.head; item != nil; item = item.next {
-		contents += fmt.Sprint(item.value)
-		if item.next != nil {
+	for item := l.Head; item != nil; item = item.Next {
+		contents += fmt.Sprint(item.Value)
+		if item.Next != nil {
 			contents += ", "
 		}
 	}
 	contents += "]"
 
 	h_val, t_val := "nil", "nil"
-	if l.head != nil {
-		h_val = fmt.Sprint(l.head.value)
+	if l.Head != nil {
+		h_val = fmt.Sprint(l.Head.Value)
 	}
-	if l.tail != nil {
-		t_val = fmt.Sprint(l.tail.value)
+	if l.Tail != nil {
+		t_val = fmt.Sprint(l.Tail.Value)
 	}
 
 	return "H: " + h_val + " | T: " + t_val + " | " + contents
