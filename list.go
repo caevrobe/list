@@ -3,68 +3,90 @@ package list
 import "fmt"
 
 type List[T any] struct {
-	Head *Node[T]
-	Tail *Node[T]
+	head *Node[T]
+	tail *Node[T]
 }
 
 type Node[T any] struct {
 	Value T
-	Prev  *Node[T]
-	Next  *Node[T]
+	prev  *Node[T]
+	next  *Node[T]
 }
 
+/* List functions *************************************************************************/
+
+// returns pointer to new typed List
 func New[T any]() *List[T] {
 	return &List[T]{}
 }
 
+// returns pointer to list head
+func (l *List[T]) Head() *Node[T] {
+	return l.head
+}
+
+// inserts new Node with given Value. returns pointer to new Node
 func (l *List[T]) Insert(Value T) *Node[T] {
 	obj := &Node[T]{Value, nil, nil}
 
-	if l.Head == nil {
-		l.Head = obj
+	if l.head == nil {
+		l.head = obj
 	} else {
-		l.Tail.Next = obj
+		l.tail.next = obj
 	}
 
-	obj.Prev = l.Tail
-	l.Tail = obj
+	obj.prev = l.tail
+	l.tail = obj
 	return obj
 }
 
+// removes given Node from List
 func (l *List[T]) Remove(obj *Node[T]) {
-	if obj == l.Head {
-		l.Head = obj.Next
+	if obj == l.head {
+		l.head = obj.next
 	}
-	if obj == l.Tail {
-		l.Tail = obj.Prev
+	if obj == l.tail {
+		l.tail = obj.prev
 	}
 
-	if obj.Prev != nil {
-		obj.Prev.Next = obj.Next
+	if obj.prev != nil {
+		obj.prev.next = obj.next
+		obj.prev = nil
 	}
-	if obj.Next != nil {
-		obj.Next.Prev = obj.Prev
+	if obj.next != nil {
+		obj.next.prev = obj.prev
+		obj.next = nil
 	}
 }
 
 // gross
 func (l *List[T]) String() string {
 	contents := "["
-	for item := l.Head; item != nil; item = item.Next {
+	for item := l.head; item != nil; item = item.next {
 		contents += fmt.Sprint(item.Value)
-		if item.Next != nil {
+		if item.next != nil {
 			contents += ", "
 		}
 	}
 	contents += "]"
 
 	h_val, t_val := "nil", "nil"
-	if l.Head != nil {
-		h_val = fmt.Sprint(l.Head.Value)
+	if l.head != nil {
+		h_val = fmt.Sprint(l.head.Value)
 	}
-	if l.Tail != nil {
-		t_val = fmt.Sprint(l.Tail.Value)
+	if l.tail != nil {
+		t_val = fmt.Sprint(l.tail.Value)
 	}
 
 	return "H: " + h_val + " | T: " + t_val + " | " + contents
+}
+
+/* Node functions *************************************************************************/
+
+func (n *Node[T]) Next() *Node[T] {
+	return n.next
+}
+
+func (n *Node[T]) Prev() *Node[T] {
+	return n.prev
 }
